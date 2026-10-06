@@ -1,0 +1,13 @@
+# Python Environments
+venv/
+__pycache__/
+
+# Secrets
+.env
+
+# ML Model Weights
+*.safetensors
+*.ckpt
+*.pt
+*.bin
+models/
