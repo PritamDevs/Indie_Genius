@@ -11,3 +11,10 @@ __pycache__/
 *.pt
 *.bin
 models/
+# Generated Outputs
+outputs/*.png
+outputs/*.jpg
+
+# Generated Outputs
+outputs/*.png
+outputs/*.jpg
