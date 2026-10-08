@@ -18,3 +18,7 @@ outputs/*.jpg
 # Generated Outputs
 outputs/*.png
 outputs/*.jpg
+
+# Test & Python Caches
+.pytest_cache/
+**/__pycache__/

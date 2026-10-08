@@ -58,36 +58,51 @@ class ImageGenerationCapability:
         output_dir: str = "outputs"
     ) -> ImageGenerationResponse:
         """
-        Runs the capability, handles errors gracefully, saves the image,
-        and logs the structured experiment record to JSON.
+        Runs the capability, classifies failure modes explicitly (Step 7),
+        saves the image, and logs the structured experiment record to JSON.
         """
         run_id = str(uuid.uuid4())[:8]
         timestamp = datetime.now(timezone.utc).isoformat()
         start_time = time.perf_counter()
+        error_category = None
 
         try:
-            if self.pipe is None:
-                self.load_model()
+            # 1. Model availability & loading check
+            try:
+                if self.pipe is None:
+                    self.load_model()
+            except Exception as load_exc:
+                error_category = "MODEL_NOT_AVAILABLE"
+                raise RuntimeError(f"Failed to load model: {load_exc}") from load_exc
 
-            os.makedirs(output_dir, exist_ok=True)
-            generator = torch.Generator(device=self.device).manual_seed(request.seed)
-
-            result = self.pipe(
-                prompt=request.prompt,
-                negative_prompt=request.negative_prompt,
-                num_inference_steps=request.steps,
-                guidance_scale=request.guidance_scale,
-                width=request.width,
-                height=request.height,
-                generator=generator,
-            )
+            # 2. Inference execution check
+            try:
+                generator = torch.Generator(device=self.device).manual_seed(request.seed)
+                result = self.pipe(
+                    prompt=request.prompt,
+                    negative_prompt=request.negative_prompt,
+                    num_inference_steps=request.steps,
+                    guidance_scale=request.guidance_scale,
+                    width=request.width,
+                    height=request.height,
+                    generator=generator,
+                )
+            except Exception as inf_exc:
+                error_category = "INFERENCE_FAILURE"
+                raise RuntimeError(f"Model inference failed: {inf_exc}") from inf_exc
 
             execution_time = round(time.perf_counter() - start_time, 2)
 
-            image = result.images[0]
-            filename = f"{self.config.MODEL_NAME}_seed{request.seed}_{run_id}.png"
-            output_path = os.path.join(output_dir, filename).replace("\\", "/")
-            image.save(output_path)
+            # 3. Output-writing check
+            try:
+                os.makedirs(output_dir, exist_ok=True)
+                image = result.images[0]
+                filename = f"{self.config.MODEL_NAME}_seed{request.seed}_{run_id}.png"
+                output_path = os.path.join(output_dir, filename).replace("\\", "/")
+                image.save(output_path)
+            except Exception as io_exc:
+                error_category = "OUTPUT_WRITING_FAILURE"
+                raise OSError(f"Failed to write image to disk: {io_exc}") from io_exc
 
             response = ImageGenerationResponse(
                 status="success",
@@ -113,6 +128,7 @@ class ImageGenerationCapability:
 
         except Exception as exc:
             execution_time = round(time.perf_counter() - start_time, 2)
+            category = error_category or "UNEXPECTED_EXCEPTION"
             response = ImageGenerationResponse(
                 status="error",
                 run_id=run_id,
@@ -133,7 +149,7 @@ class ImageGenerationCapability:
                 output_path=None,
                 licence_reference=self.config.LICENCE_REF,
                 observation=request.observation,
-                error_message=f"{type(exc).__name__}: {str(exc)}",
+                error_message=f"[{category}] {type(exc).__name__}: {str(exc)}",
             )
 
         # Record every experiment to experiments/experiment_log.json (Step 8)
@@ -142,7 +158,6 @@ class ImageGenerationCapability:
 
 
 if __name__ == "__main__":
-    # Verify the new capability contract and automated JSON logger
     capability = ImageGenerationCapability()
     test_req = ImageGenerationRequest(
         prompt="cinematic interior of a small Kolkata apartment at night, warm tungsten practical lamp, monsoon rain on window, 35mm film grain",

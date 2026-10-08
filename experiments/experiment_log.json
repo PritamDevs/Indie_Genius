@@ -20,5 +20,27 @@
     "licence_reference": "CreativeML Open RAIL-M (docs/model_card_cyberrealistic.md)",
     "observation": "Baseline programmatic test of the Indie-Genius capability contract.",
     "error_message": null
+  },
+  {
+    "status": "success",
+    "run_id": "01b64aec",
+    "timestamp": "2026-10-08T18:12:44.272873+00:00",
+    "capability": "image_generation",
+    "engine": "diffusers",
+    "model": "cyberrealistic",
+    "model_version": "V9_FP16 (SD 1.5)",
+    "prompt": "cinematic interior of a small Kolkata apartment at night, warm tungsten practical lamp, monsoon rain on window, 35mm film grain",
+    "negative_prompt": "blurry, low quality, distorted, deformed, watermark, text",
+    "seed": 12345,
+    "width": 512,
+    "height": 512,
+    "steps": 5,
+    "guidance_scale": 7.5,
+    "hardware": "Windows CPU (AMD Radeon Integrated Host, 512MB VRAM)",
+    "execution_time_seconds": 162.65,
+    "output_path": "outputs/cyberrealistic_seed12345_01b64aec.png",
+    "licence_reference": "CreativeML Open RAIL-M (docs/model_card_cyberrealistic.md)",
+    "observation": "Reproducibility verification test via FastAPI HTTP endpoint (matching seed 12345).",
+    "error_message": null
   }
 ]
