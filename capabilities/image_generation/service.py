@@ -3,7 +3,7 @@ import time
 import uuid
 from datetime import datetime, timezone
 import torch
-from diffusers import StableDiffusionPipeline
+from diffusers import StableDiffusionPipeline, EulerDiscreteScheduler
 
 from capabilities.image_generation.contract import (
     ImageGenerationRequest,
@@ -48,6 +48,9 @@ class ImageGenerationCapability:
             torch_dtype=torch.float32,
             use_safetensors=True
         )
+
+        self.pipe.scheduler = EulerDiscreteScheduler.from_config(self.pipe.scheduler.config)
+        
         self.pipe.to(self.device)
         self.pipe.enable_attention_slicing()
         print("[INFO] Model loaded and ready.")
@@ -163,7 +166,7 @@ if __name__ == "__main__":
         prompt="cinematic interior of a small Kolkata apartment at night, warm tungsten practical lamp, monsoon rain on window, 35mm film grain",
         width=512,
         height=512,
-        steps=5,
+        steps=8,
         seed=12345,
         observation="Baseline programmatic test of the Indie-Genius capability contract."
     )
