@@ -1,0 +1,23 @@
+[
+  {
+    "panel_id": "panel_01_establishing",
+    "beat": "Establish the shop, rain, and wall clock at 6:55",
+    "run_id": "ae801592",
+    "output_path": "outputs/cyberrealistic_seed20260701_ae801592.png",
+    "execution_time_seconds": 210.97
+  },
+  {
+    "panel_id": "panel_02_action",
+    "beat": "Dev working beneath desk lamp, screw slips",
+    "run_id": "4fe0a94d",
+    "output_path": "outputs/cyberrealistic_seed20260702_4fe0a94d.png",
+    "execution_time_seconds": 211.66
+  },
+  {
+    "panel_id": "panel_03_reveal",
+    "beat": "Old wristwatch revealed between them on the desk",
+    "run_id": "079a4ee5",
+    "output_path": "outputs/cyberrealistic_seed20260703_079a4ee5.png",
+    "execution_time_seconds": 209.72
+  }
+]
