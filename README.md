@@ -1,79 +1,111 @@
-Indie-Genius: AI Capability Runner (Week 01)
+# Indie-Genius: AI Capability & Storyboard Runner (Week 01 – Week 02)
 
-This repository is the foundational engineering prototype for Indie-Genius. It wraps a local AI image-generation model (CyberRealistic) into a programmatic, reproducible FastAPI capability contract, bypassing manual desktop GUIs like DiffusionBee.
-
-💻 Hardware Compatibility & Requirements
-
-This project is explicitly engineered to run on standard consumer hardware.
-* **OS:** Windows, macOS, or Linux.
-* **Compute:** Tested successfully on a Windows host with an integrated AMD Radeon GPU (512MB VRAM) utilizing CPU fallback.
-* **Architecture Note:** We use the `EulerDiscreteScheduler` to achieve clear, cinematic image convergence in just 8 steps. This prevents the "deep-fried" noise artifacts common when using default schedulers (like PNDM) on low-step CPU executions.
-* **Storage:** Requires at least ~3 GB of free disk space (the Hugging Face pipeline downloads a 2.13 GB model on the first run).
-* **Software:** Python 3.10 or higher, Git.
+This repository is the foundational engineering prototype for **Indie-Genius**. It wraps a local AI image-generation pipeline (`CyberRealistic` / Stable Diffusion 1.5) into a programmatic, reproducible **FastAPI capability contract** and a **Config-Driven Multi-Panel Storyboard Engine**, bypassing manual desktop GUIs.
 
 ---
 
-🚀 Quickstart: Installation
+## 💻 Hardware Compatibility & Requirements
 
-Do not install dependencies globally. Use a Python virtual environment to ensure dependency isolation and reproducibility.
+This project is explicitly engineered to run reliably on standard consumer hardware without requiring a dedicated NVIDIA CUDA GPU.
 
-**1. Clone the repository and enter the directory:**
+- **OS:** Windows 11, macOS, or Linux.
+- **Compute:** Verified on Windows 11 with an AMD Ryzen 5 7520U and integrated AMD Radeon Graphics (512 MB UMA VRAM) utilizing `torch.float32` CPU execution and memory attention slicing.
+- **Architecture Note:** We use the `EulerDiscreteScheduler` to achieve clean image convergence in `4–8 steps` on CPU, preventing the noise/NaN artifacts common with default schedulers on low-step CPU runs.
+- **Storage:** Requires at least **~3 GB of free disk space** (the Hugging Face Diffusers pipeline caches the `~2.13 GB` model weights on initial execution).
+- **Software:** Python 3.10+ (tested on Python 3.14), Git.
+
+---
+
+## 🚀 Quickstart: Installation
+
+Do not install dependencies globally. Always use a Python virtual environment to ensure dependency isolation and reproducibility.
+
+### 1. Clone the repository and enter the directory:
 ```powershell
-git clone <your-github-repo-url>
+git clone [https://github.com/PritamDevs/Indie_Genius.git](https://github.com/PritamDevs/Indie_Genius.git)
 cd Indie_Genius
-2. Create and activate a Python virtual environment:
+```
 
-PowerShell
-# Windows
+### 2. Create and activate a Python virtual environment:
+**Windows (PowerShell):**
+```powershell
 python -m venv venv
 .\venv\Scripts\Activate.ps1
+```
 
-# macOS/Linux
+**macOS / Linux:**
+```bash
 python3 -m venv venv
 source venv/bin/activate
-3. Install dependencies:
+```
 
-PowerShell
+### 3. Install dependencies:
+```powershell
 pip install -r requirements.txt
-⚙️ How to Run and Test the System
-⚠️ CRITICAL PATHING NOTE: Always run Python scripts from the root Indie_Genius directory using the -m (module) flag. This ensures Python resolves internal folder imports (like capabilities/) correctly and prevents ModuleNotFoundError.
+```
 
-1. Start the Live API Server (FastAPI / Uvicorn)
-To run the capability as a live local web service:
+---
 
-PowerShell
+## ⚙️ How to Run and Test the System
+
+> ⚠️ **CRITICAL PATHING NOTE:** Always run Python scripts from the root `Indie_Genius` directory using the `-m` module flag so internal package imports resolve cleanly.
+
+### 1. Start the Live API Server (FastAPI / Uvicorn)
+To run the capability as a local HTTP microservice:
+```powershell
 uvicorn backend.api:app --host 127.0.0.1 --port 8000
-Interactive Dashboard: Open http://127.0.0.1:8000/docs in your browser to test endpoints visually.
+```
+- **Interactive Swagger UI:** Open `http://127.0.0.1:8000/docs` in your browser to test endpoints visually.
+- **Readiness Health Check:** `GET http://127.0.0.1:8000/health`
 
-Readiness Check: GET http://127.0.0.1:8000/health
-
-2. Developer Testing: Run the Capability Directly
-To test the core image generation service in isolation (without starting the web server) and verify the Euler scheduler output:
-
-PowerShell
-python -m capabilities.image_generation.service
-(Note: The first time you run this, it will take a few minutes to download the 2.13 GB .safetensors model to your local cache).
-
-3. Run the Automated Validation Suite
-To verify that the Pydantic capability contract correctly catches and rejects invalid dimensions, missing prompts, or negative steps:
-
-PowerShell
+### 2. Run the Automated API Validation Suite
+To verify that the Pydantic capability contract catches and rejects invalid dimensions, missing prompts, and out-of-range parameters:
+```powershell
 python -m pytest tests/test_api.py -v
-4. Run the Filmmaking Benchmark Suite
-To batch-generate 5 specific pre-production use cases (location scouting, wardrobe, set extension) and automatically log the metadata to the experiment tracker:
+```
 
-PowerShell
+### 3. Generate Multi-Panel Storyboards (Week 02 Universal Engine)
+Our config-driven storyboard engine (`experiments/storyboard_engine.py`) generates individual scene panels, logs execution metadata, and automatically stitches a publication-ready comic storyboard sheet (with white background, black borders, shot headers, and wrapped screenplay captions).
+
+- **Run the built-in preset storyboard (*The Compilation Run*):**
+  ```powershell
+  python -m experiments.storyboard_engine
+  ```
+- **Generate any custom storyboard from a JSON specification:**
+  Edit `experiments/custom_request.json` (supports 1 to N panels with automatic R x C grid scaling) and run:
+  ```powershell
+  python -m experiments.storyboard_engine experiments/custom_request.json
+  ```
+  *(Tip: For fast live demos on CPU, set `"width": 256, "height": 256, "steps": 4` in your JSON panel config to generate each panel in ~28 seconds).*
+
+### 4. Re-Run Specific Storyboard & Revision Experiments
+```powershell
+# Generate 'The Minute Hand' 3-panel sequence
+python -m experiments.run_minute_hand_storyboard
+
+# Re-stitch 'The Minute Hand' into a dynamic multi-panel comic sheet
+python -m experiments.stitch_multipanel_grid
+
+# Run the Step 9 Targeted Revision & Global Attention Drift test
+python -m experiments.run_revision_test
+
+# Run the Week 01 Filmmaking Benchmark Suite
 python -m experiments.run_filmmaking_tests
-📁 Repository Architecture
-backend/ - The FastAPI web server, routing, and HTTP exception handling.
+```
 
-capabilities/image_generation/ - The generic input/output Pydantic contract (contract.py) and the replaceable Diffusers model adapter (service.py).
+---
 
-experiments/ - Automated batch scripts (run_filmmaking_tests.py) and the structured JSON database (experiment_log.json).
+## 📁 Repository Architecture
 
-outputs/ - Ignored by Git; stores locally generated .png artifacts.
+- **`backend/`** — FastAPI web server, routing (`api.py`), and HTTP exception handling.
+- **`capabilities/image_generation/`** — Input/output Pydantic contracts (`contract.py`) and the core Diffusers execution service (`service.py`).
+- **`experiments/`** — Universal storyboard engine (`storyboard_engine.py`), custom JSON specs (`custom_request.json`), dynamic Pillow grid stitchers (`stitch_multipanel_grid.py`), revision experiments, and structured telemetry logs (`experiment_log.json`).
+- **`outputs/`** — Stores generated panel artifacts and stitched `.png` storyboard sheets (raw weights and bulk outputs ignored by Git; reference storyboard sheets tracked).
+- **`docs/`** — Week 01 CTO report & architecture notes, plus Week 02 code audit, hardware verification, baseline tests, model provenance (`model_candidates.md`), and the comprehensive Week 02 Storyboard Engineering Report (`week_02_storyboard_report.md`).
+- **`tests/`** — Automated `pytest` validation suite (`test_api.py`).
 
-docs/ - Architecture notes, licence provenance, tool comparisons, and the Week 01 CTO Report.
+---
 
-⚖️ Model Provenance
-This capability currently defaults to CyberRealistic V9 (SD 1.5). It is governed by the CreativeML Open RAIL-M licence. See docs/model_card_cyberrealistic.md for commercial use restrictions, including the requirement to implement safety filters if exposing unfiltered results to public users.
+## ⚖️ Model Provenance & Licensing
+
+This capability defaults to **CyberRealistic V9 (Stable Diffusion 1.5 architecture)**, governed by the **CreativeML Open RAIL-M** license. Full model evaluation, provenance details, and hardware boundary analyses are documented in `docs/model_candidates.md` and `docs/week_02_storyboard_report.md`.
