@@ -1,0 +1,24 @@
+{
+    "title": "MIDNIGHT PLATFORM — SCENE 01",
+    "subtitle": "EXT. RAILWAY STATION — NIGHT",
+    "slug": "midnight_platform",
+    "max_cols": 2,
+    "panels": [
+        {
+            "shot_title": "1.1 WIDE SHOT — RAINY PLATFORM",
+            "caption": "An empty railway platform glistening under rain and yellow streetlamps.",
+            "prompt": "Comic-book illustration, wide shot of a vintage railway platform at night in heavy rain, warm yellow station lamps, wet reflections, graphic-novel linework, no text",
+            "seed": 20260901,
+            "steps": 8
+        },
+        {
+            "shot_title": "1.2 MEDIUM SHOT — THE DETECTIVE",
+            "caption": "A detective in a dark trench coat steps out from the shadows.",
+            "prompt": "Comic-book illustration, medium shot of an Indian detective in a dark trench coat standing under a station lamp in the rain, noir graphic-novel style, no text",
+            "seed": 20260902,
+            "steps": 8
+        }
+    ]
+}
+
+

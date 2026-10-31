@@ -1,0 +1,36 @@
+{
+  "title": "THE COMPILATION RUN \u2014 A LATE-NIGHT DEBUGGING SHORT",
+  "slug": "compilation_run",
+  "panels": [
+    {
+      "panel_index": 1,
+      "shot_title": "1.1 ESTABLISHING SHOT \u2014 INT. BEDROOM \u2014 3:00 AM",
+      "caption": "Dark room lit by a glowing ultrawide monitor showing terminal logs. A coffee mug sits beside the keyboard.",
+      "prompt": "Comic-book illustration, wide shot of a dark bedroom desk at night illuminated by a glowing computer monitor and warm desk lamp, coffee mug on wooden desk, clean inked graphic-novel linework, dramatic lighting, no text",
+      "seed": 20260801,
+      "run_id": "2fe4da4c",
+      "output_path": "outputs/cyberrealistic_seed20260801_2fe4da4c.png",
+      "execution_time_seconds": 198.2
+    },
+    {
+      "panel_index": 2,
+      "shot_title": "1.2 MEDIUM SHOT \u2014 THE DEVELOPER",
+      "caption": "A tired young software engineer leans forward in glasses, inspecting a broken service trace on screen.",
+      "prompt": "Comic-book illustration, medium portrait of a focused young Indian software engineer wearing glasses looking at a glowing computer screen at night, warm tungsten key light, cool blue monitor rim light, graphic-novel inked style, no text",
+      "seed": 20260802,
+      "run_id": "11b99d17",
+      "output_path": "outputs/cyberrealistic_seed20260802_11b99d17.png",
+      "execution_time_seconds": 252.21
+    },
+    {
+      "panel_index": 3,
+      "shot_title": "1.3 CLOSE UP \u2014 SUNRISE & CLEAN BUILD",
+      "caption": "Dawn light enters the window behind the desk. A fresh steaming cup of black coffee rests beside the quiet laptop.",
+      "prompt": "Comic-book illustration, close-up of a steaming black coffee mug next to a sleek laptop on a wooden desk by a window at golden dawn sunrise, peaceful atmosphere, crisp inked graphic-novel style, no text",
+      "seed": 20260803,
+      "run_id": "5e93e33c",
+      "output_path": "outputs/cyberrealistic_seed20260803_5e93e33c.png",
+      "execution_time_seconds": 240.53
+    }
+  ]
+}
